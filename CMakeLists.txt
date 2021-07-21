@@ -1,0 +1,48 @@
+cmake_minimum_required(VERSION 3.1.0)
+
+
+PROJECT(swigtest)
+
+SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
+
+
+# set default build-type to Release
+if(NOT CMAKE_BUILD_TYPE)
+   set(CMAKE_BUILD_TYPE "Release" CACHE STRING "type of build: Debug Release RelWithDebInfo MinSizeRel." FORCE)
+endif()
+
+
+add_library(libtest test.cxx)
+add_executable(testmain testmain.cxx)
+target_link_libraries(testmain libtest)
+
+
+FIND_PACKAGE(SWIG 3.0 REQUIRED)
+INCLUDE("${SWIG_USE_FILE}")
+
+include_directories(${CMAKE_SOURCE_DIR})
+
+SET_SOURCE_FILES_PROPERTIES(test.i PROPERTIES CPLUSPLUS ON)
+
+find_package(PythonInterp)
+FIND_PACKAGE(PythonLibs REQUIRED)
+INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
+#FIND_PACKAGE(Numpy REQUIRED)
+#INCLUDE_DIRECTORIES(${NUMPY_INCLUDE_DIRS})
+
+  # TODO probably better to call the module stirpy or something
+  # TODO -builtin option only appropriate for python
+  # while the next statement sets it for all modules called test
+  #SET(SWIG_MODULE_test_EXTRA_FLAGS -builtin )
+  SWIG_ADD_LIBRARY(test LANGUAGE python TYPE MODULE SOURCES test.i)
+  #SWIG_WORKAROUND(${SWIG_MODULE_test_REAL_NAME})
+  SWIG_LINK_LIBRARIES(test libtest ${PYTHON_LIBRARIES})
+  #target_link_libraries(${SWIG_MODULE_test_REAL_NAME})
+
+  #set(PYTHON_DEST ${CMAKE_INSTALL_PREFIX}/python CACHE PATH "Destination for python module")
+  #INSTALL(TARGETS ${SWIG_MODULE_test_REAL_NAME} DESTINATION ${PYTHON_DEST})
+  #INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/stir.py  DESTINATION ${PYTHON_DEST})
+  
+
+
+
