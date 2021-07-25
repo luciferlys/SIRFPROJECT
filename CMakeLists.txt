@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.1.0)
 PROJECT(swigtest)
 
 SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
-
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # set default build-type to Release
 if(NOT CMAKE_BUILD_TYPE)
