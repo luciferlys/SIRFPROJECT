@@ -1,10 +1,9 @@
 #include "test.h"
 #include <iostream>
+#include "DataContainer.h"
 
 int main()
 {
-	cpluscplus::MathClass stud;
-	stud.multiply();
-	stud.items();
+	sirf::MathClass;
 	return 0;
 }

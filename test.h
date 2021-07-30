@@ -1,15 +1,25 @@
 #pragma once 
+#include "DataContainer.h"
+#include <iostream>
 
-namespace cpluscplus
+namespace sirf
+
 {
-class MathClass
-{
-public:
 
-    float a;
+    class MathClass : public DataContainer
+    {
+    public:
 
-    virtual unsigned int items();
-    
-    virtual void multiply();
-};
+        double a;
+
+        virtual unsigned int items();
+
+        virtual void multiply(const DataContainer& x, const DataContainer& y);
+
+        virtual void divide(const DataContainer& x, const DataContainer& y);
+
+        virtual void maximum(const DataContainer& x, const DataContainer& y);
+
+        virtual void minimum(const DataContainer& x, const DataContainer& y);
+    };
 }
