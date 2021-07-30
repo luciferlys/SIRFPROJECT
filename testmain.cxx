@@ -4,6 +4,6 @@
 
 int main()
 {
-	sirf::MathClass;
+	sirf::MathClass a;
 	return 0;
 }
