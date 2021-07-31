@@ -21,7 +21,7 @@ unsigned int sirf::MathClass::items()
 
 void sirf::MathClass::multiply(const DataContainer& x, const DataContainer& y)
 {
-    this->a = x.a * y.a;
+    this->a = dynamic_cast<const MathClass&>(x).a * dynamic_cast<const MathClass&>(y).a;
 
     std::cout << "in multiply: a=" << a << std::endl;
 
@@ -29,7 +29,7 @@ void sirf::MathClass::multiply(const DataContainer& x, const DataContainer& y)
 
 void sirf::MathClass::divide(const DataContainer& x, const DataContainer& y)
 {
-    this->a = x.a / y.a;
+    this->a = dynamic_cast<const MathClass&>(x).a / dynamic_cast<const MathClass&>(y).a;
 
     std::cout << "in divide: a=" << a << std::endl;
 
@@ -38,14 +38,14 @@ void sirf::MathClass::divide(const DataContainer& x, const DataContainer& y)
 void sirf::MathClass::maximum(const DataContainer& x, const DataContainer& y)
 {
 
-    std::cout << "We have" << max(x.a, y.a) << std::endl;
+    std::cout << "We have" << max(dynamic_cast<const MathClass&>(x).a, dynamic_cast<const MathClass&>(y).a) << std::endl;
 
 }
 
 void sirf::MathClass::minimum(const DataContainer& x, const DataContainer& y)
 {
 
-    std::cout << "We have" << min(x.a, y.a) << std::endl;
+    std::cout << "We have" << min(dynamic_cast<const MathClass&>(x).a, dynamic_cast<const MathClass&>(y).a) << std::endl;
 
 }
 
