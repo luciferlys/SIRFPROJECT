@@ -22,12 +22,7 @@ limitations under the License.
 #define SIRF_ABSTRACT_DATA_CONTAINER_TYPE
 
 #include <map>
-#include <stdlib.h>
-#include <string>
-#include <vector>
-#include <memory>
-
-//#include "DataHandle.h"
+#include "DataHandle.h"
 
 /*!
 \ingroup Common
@@ -48,10 +43,10 @@ namespace sirf {
 		virtual ~DataContainer() {}
 		//virtual DataContainer* new_data_container() const = 0;
 		//virtual ObjectHandle<DataContainer>* new_data_container_handle() const = 0;
-		virtual unsigned int items() const = 0;
-		virtual bool is_complex() const = 0;
-		virtual float norm() const = 0;
-		virtual void dot(const DataContainer& dc, void* ptr) const = 0;
+		//virtual unsigned int items() const = 0;
+		//virtual bool is_complex() const = 0;
+		//virtual float norm() const = 0;
+		//virtual void dot(const DataContainer& dc, void* ptr) const = 0;
 		virtual void multiply
 			(const DataContainer& x, const DataContainer& y) = 0;
 		virtual void divide
@@ -60,30 +55,30 @@ namespace sirf {
 			(const DataContainer& x, const DataContainer& y) = 0;
 		virtual void minimum
 			(const DataContainer& x, const DataContainer& y) = 0;
-		virtual void axpby(
-			const void* ptr_a, const DataContainer& x,
-			const void* ptr_b, const DataContainer& y) = 0;
-		virtual void xapyb(
-			const DataContainer& x, const void* ptr_a,
-			const DataContainer& y, const void* ptr_b) // = 0; // when PET side is merged
-		{
-			axpby(ptr_a, x, ptr_b, y); // to go when PET side is merged
-		}
-		virtual void xapyb(
-			const DataContainer& x, const DataContainer& a,
-			const DataContainer& y, const DataContainer& b) = 0;
-		virtual void write(const std::string &filename) const = 0;
-
-		bool is_empty() const
-		{
-			return items() < 1;
-		}
-		//std::unique_ptr<DataContainer> clone() const
+		//virtual void axpby(
+			//const void* ptr_a, const DataContainer& x,
+			//const void* ptr_b, const DataContainer& y) = 0;
+		//virtual void xapyb(
+			//const DataContainer& x, const void* ptr_a,
+			//const DataContainer& y, const void* ptr_b) // = 0; // when PET side is merged
 		//{
-			//return std::unique_ptr<DataContainer>(this->clone_impl());
+			//axpby(ptr_a, x, ptr_b, y); // to go when PET side is merged
 		//}
+		//virtual void xapyb(
+			//const DataContainer& x, const DataContainer& a,
+			//const DataContainer& y, const DataContainer& b) = 0;
+		//virtual void write(const std::string &filename) const = 0;
+
+		//bool is_empty() const
+		//{
+			//return items() < 1;
+		//}
+		std::unique_ptr<DataContainer> clone() const
+		{
+			//return std::unique_ptr<DataContainer>(this->clone_impl());
+		}
 	protected:
-		virtual DataContainer* clone_impl() const = 0;
+		//virtual DataContainer* clone_impl() const = 0;
 	};
 }
 
