@@ -12,6 +12,13 @@ namespace sirf
 
         double a;
 
+        MathClass operator* (const MathClass & b) const{
+        MathClass c;
+        c.multiply(*this,b);
+        return c;
+        }
+        
+
         virtual unsigned int items();
 
         virtual void multiply(const DataContainer& x, const DataContainer& y);

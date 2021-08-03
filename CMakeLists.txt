@@ -42,6 +42,12 @@ INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
   #set(PYTHON_DEST ${CMAKE_INSTALL_PREFIX}/python CACHE PATH "Destination for python module")
   #INSTALL(TARGETS ${SWIG_MODULE_ala_REAL_NAME} DESTINATION ${PYTHON_DEST})
   #INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/stir.py  DESTINATION ${PYTHON_DEST})
+
+# find_package(Boost 1.36.0)
+# For Visual Studio we have to disable the auto-linking feature of boost# where just including a boost file automatically adds it to the linker path.# Although this sounds great, it sadly breaks because of conflicting file-paths when linking etc etc.# In any case, we need to add the libraries by hand for other systems.# See http://stackoverflow.com/questions/32252016/cmake-visual-studio-build-looks-for-wrong-libraryadd_definitions(-DBOOST_ALL_NO_LIB)
+# SWIG_LINK_LIBRARIES(data Boost::system Boost::filesystem Boost::thread Boost::date_time Boost::chrono)
+# SWIG_LINK_LIBRARIES(data Boost::boost)
+#TARGET_INCLUDE_DIRECTORIES(${​​​SWIG_MODULE_data_REAL_NAME}​​​ PUBLIC ${​​​Boost_INCLUDE_DIRS}​​​)
   
 
 
