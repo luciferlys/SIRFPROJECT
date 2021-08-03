@@ -28,7 +28,7 @@
 %extend MathClass {
 MathClass operator* (const MathClass& b)
 {
-  Mathclass c(*this);
+  MathClass c(*this);
   c.multiply(*this,b));
   return c;
 }
