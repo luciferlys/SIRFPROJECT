@@ -14,13 +14,28 @@ endif()
 
 add_library(libtest test.cxx)
 add_executable(testmain testmain.cxx)
-target_link_libraries(testmain libtest)
+target_link_libraries(testmain libtest sirf::cstir)
 
 
 FIND_PACKAGE(SWIG 3.0 REQUIRED)
 INCLUDE("${SWIG_USE_FILE}")
 
+FIND_PACKAGE(SIRF REQUIRED)
+
 include_directories(${CMAKE_SOURCE_DIR})
+
+set(SIRF_SOURCE "${CMAKE_SOURCE_DIR}" CACHE PATH "Location of the SIRF source")
+include_directories(${SIRF_SOURCE}/src/common/include/)
+include_directories(${SIRF_SOURCE}/src/iUtilities/include/)
+include_directories(${BOOST_ROOT})
+include_directories(${SIRF_SOURCE}/src/xSTIR/cSTIR/include/)
+
+
+set(STIR_SOURCE "${CMAKE_SOURCE_DIR}" CACHE PATH "Location of the STIR source")
+include_directories(${STIR_SOURCE}/src/include/)
+
+set(INSTALL_SOURCE "${CMAKE_SOURCE_DIR}" CACHE PATH "Location of the INSTALL source")
+include_directories(${INSTALL_SOURCE}/include/)
 
 SET_SOURCE_FILES_PROPERTIES(test.i PROPERTIES CPLUSPLUS ON)
 
@@ -34,14 +49,16 @@ INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
   # TODO -builtin option only appropriate for python
   # while the next statement sets it for all modules called test
   #SET(SWIG_MODULE_test_EXTRA_FLAGS -builtin )
-  SWIG_ADD_LIBRARY(ala LANGUAGE python TYPE MODULE SOURCES test.i)
+  SWIG_ADD_LIBRARY(ala LANGUAGE python TYPE MODULE SOURCES test.i ${STIR_REGISTRIES})
   #SWIG_WORKAROUND(${SWIG_MODULE_ala_REAL_NAME})
-  SWIG_LINK_LIBRARIES(ala libtest ${PYTHON_LIBRARIES})
+  SWIG_LINK_LIBRARIES(ala libtest sirf::cstir ${PYTHON_LIBRARIES})
   #target_link_libraries(${SWIG_MODULE_ala_REAL_NAME})
 
-  #set(PYTHON_DEST ${CMAKE_INSTALL_PREFIX}/python CACHE PATH "Destination for python module")
-  #INSTALL(TARGETS ${SWIG_MODULE_ala_REAL_NAME} DESTINATION ${PYTHON_DEST})
-  #INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/stir.py  DESTINATION ${PYTHON_DEST})
+  set(PYTHON_DEST ${CMAKE_INSTALL_PREFIX}/python CACHE PATH "Destination for python module")
+  INSTALL(TARGETS ${SWIG_MODULE_ala_REAL_NAME} DESTINATION ${PYTHON_DEST})
+  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/ala.py  DESTINATION ${PYTHON_DEST})
+
+
   
 
 
