@@ -6,5 +6,9 @@
 int main()
 {
 	sirf::STIRImageData a;
+	//sirf::PETAcquisitionData b;
+	sirf::PETAcquisitionDataInFile c;
+	sirf::PETAcquisitionDataInMemory d;
+
 	return 0;
 }
