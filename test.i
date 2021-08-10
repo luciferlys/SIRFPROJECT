@@ -20,24 +20,33 @@
   
 %}
 
-%ignore sirf::PETAcquisitionData;
-%ignore sirf::PETAcquisitionDataInFile;
-%ignore sirf::PETAcquisitionDataInMemory;
-%ignore sirf::ImageData;
-%ignore sirf::Image3DF;
-%ignore sirf::Image3DFIterator;
-%ignore sirf::Image3DFIterator_const;
-%ignore sirf::Voxels3DF;
-%ignore sirf::*::clone;
+%ignore *::clone;
+%extend sirf::DataContainer
+{
+  DataContainer * my_clone() const
+  { 
+    return (*self).clone().get();
+  }
+}
+
+%newobject *::my_clone();
+
+
 %ignore sirf::STIRImageData::zoom_image;
-
-
-
+%ignore sirf::PETAcquisitionData;
 
 %include "std_string.i"
+%include "std_vector.i"
+%include "std_shared_ptr.i"
+
+
+
 %include "sirf/common/DataContainer.h"
+%include "sirf/common/GeometricalInfo.h"
 %include "sirf/common/ImageData.h"
 %include "sirf/common/PETImageData.h"
 %include "sirf/STIR/stir_types.h"
+
+
 %include "sirf/STIR/stir_data_containers.h"
 %include "test.h"
