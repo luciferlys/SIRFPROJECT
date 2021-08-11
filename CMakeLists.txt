@@ -13,8 +13,10 @@ endif()
 
 
 add_library(libtest test.cxx)
+target_link_libraries(libtest sirf::cstir)
+
 add_executable(testmain testmain.cxx)
-target_link_libraries(testmain libtest sirf::cstir)
+target_link_libraries(testmain libtest)
 
 
 FIND_PACKAGE(SWIG 3.0 REQUIRED)
@@ -24,20 +26,13 @@ FIND_PACKAGE(SIRF REQUIRED)
 
 include_directories(${CMAKE_SOURCE_DIR})
 
-set(SIRF_SOURCE "${CMAKE_SOURCE_DIR}" CACHE PATH "Location of the SIRF source")
-include_directories(${SIRF_SOURCE}/src/common/include/)
-include_directories(${SIRF_SOURCE}/src/iUtilities/include/)
-include_directories(${BOOST_ROOT})
-include_directories(${SIRF_SOURCE}/src/xSTIR/cSTIR/include/)
+#include_directories(${BOOST_ROOT})
 
-
-set(STIR_SOURCE "${CMAKE_SOURCE_DIR}" CACHE PATH "Location of the STIR source")
-include_directories(${STIR_SOURCE}/src/include/)
-
-set(INSTALL_SOURCE "${CMAKE_SOURCE_DIR}" CACHE PATH "Location of the INSTALL source")
-include_directories(${INSTALL_SOURCE}/include/)
-
-SET_SOURCE_FILES_PROPERTIES(test.i PROPERTIES CPLUSPLUS ON)
+get_target_property(SIRF_INCLUDE_DIRS  sirf::cstir INTERFACE_INCLUDE_DIRECTORIES)
+message(STATUS "SIRF_INCLUDE_DIRS: ${SIRF_INCLUDE_DIRS}")
+SET_SOURCE_FILES_PROPERTIES(test.i PROPERTIES
+  CPLUSPLUS ON
+  INCLUDE_DIRECTORIES "${SIRF_INCLUDE_DIRS}")
 
 find_package(PythonInterp)
 FIND_PACKAGE(PythonLibs REQUIRED)
