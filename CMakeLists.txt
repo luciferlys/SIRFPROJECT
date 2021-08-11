@@ -10,19 +10,17 @@ SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
 if(NOT CMAKE_BUILD_TYPE)
    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "type of build: Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif()
-
+FIND_PACKAGE(SIRF REQUIRED)
 
 add_library(libtest test.cxx)
 target_link_libraries(libtest sirf::cstir)
 
 add_executable(testmain testmain.cxx)
-target_link_libraries(testmain libtest)
+target_link_libraries(testmain libtest ${STIR_LIBRARIES})
 
 
 FIND_PACKAGE(SWIG 3.0 REQUIRED)
 INCLUDE("${SWIG_USE_FILE}")
-
-FIND_PACKAGE(SIRF REQUIRED)
 
 include_directories(${CMAKE_SOURCE_DIR})
 
@@ -46,7 +44,7 @@ INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
   #SET(SWIG_MODULE_test_EXTRA_FLAGS -builtin )
   SWIG_ADD_LIBRARY(ala LANGUAGE python TYPE MODULE SOURCES test.i ${STIR_REGISTRIES})
   #SWIG_WORKAROUND(${SWIG_MODULE_ala_REAL_NAME})
-  SWIG_LINK_LIBRARIES(ala libtest sirf::cstir ${PYTHON_LIBRARIES})
+  SWIG_LINK_LIBRARIES(ala libtest sirf::cstir ${STIR_LIBRARIES} ${PYTHON_LIBRARIES})
   #target_link_libraries(${SWIG_MODULE_ala_REAL_NAME})
 
   set(PYTHON_DEST ${CMAKE_INSTALL_PREFIX}/python CACHE PATH "Destination for python module")
