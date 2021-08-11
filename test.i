@@ -17,6 +17,7 @@
 
 #include "sirf/common/DataContainer.h"
 #include "sirf/STIR/stir_data_containers.h"
+#include "sirf/STIR/stir_x.h"
   
 %}
 
@@ -33,7 +34,16 @@
 
 
 %ignore sirf::STIRImageData::zoom_image;
-
+%ignore sirf::ListmodeToSinograms;
+%ignore sirf::PETAcquisitionSensitivityModel;
+%ignore sirf::PETAcquisitionModel;
+%ignore sirf::PETScatterEstimator;
+%ignore sirf::PETAcquisitionModelUsingMatrix;
+%ignore sirf::xSTIR_GeneralisedPrior3DF;
+%ignore sirf::xSTIR_GeneralisedObjectiveFunction3DF;
+%ignore sirf::xSTIR_IterativeReconstruction3DF;
+%ignore sirf::xSTIR_FBP2DReconstruction::set_up;
+%ignore sirf::xSTIR_FBP2DReconstruction::process;
 
 %include "std_string.i"
 %include "std_vector.i"
@@ -60,4 +70,5 @@
 %include "sirf/common/PETImageData.h"
 %include "sirf/STIR/stir_types.h"
 %include "sirf/STIR/stir_data_containers.h"
+%include "sirf/STIR/stir_x.h"
 %include "test.h"
