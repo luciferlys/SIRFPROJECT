@@ -13,12 +13,25 @@
 #include <chrono>
 #include <fstream>
 #include <exception>
+#include <algorithm>
 #include "test.h"
 
 #include "sirf/common/DataContainer.h"
 #include "sirf/STIR/stir_data_containers.h"
 #include "sirf/STIR/stir_x.h"
   
+%}
+
+#if defined(SWIGPYTHON)
+%include "numpy.i"
+#endif
+
+%init %{
+#if defined(SWIGPYTHON)
+  // numpy support
+  import_array();
+   #include <numpy/ndarraytypes.h>
+#endif
 %}
 
 %ignore *::clone;
@@ -47,6 +60,7 @@
 
 %include "std_string.i"
 %include "std_vector.i"
+%include "std_map.i"
 %include "std_shared_ptr.i"
 %shared_ptr(sirf::DataContainer)
 %shared_ptr(sirf::ImageData)
@@ -64,6 +78,8 @@
 %ignore sirf::PETAcquisitionData::set_segment;
 
 
+%newobject *::dimensions;
+
 %include "sirf/common/DataContainer.h"
 %include "sirf/common/GeometricalInfo.h"
 %include "sirf/common/ImageData.h"
@@ -72,3 +88,22 @@
 %include "sirf/STIR/stir_data_containers.h"
 %include "sirf/STIR/stir_x.h"
 %include "test.h"
+
+%extend sirf::STIRImageData
+{
+  PyObject* as_array() const
+  {
+    sirf::Dimensions sirf_dims = self->dimensions();
+    npy_intp dims[3];
+    dims[0]=sirf_dims["z"];
+    dims[1]=sirf_dims["y"];
+    dims[2]=sirf_dims["x"];
+    PyObject * np_array =
+      PyArray_SimpleNew(3, dims, NPY_FLOAT);
+    /* TODO: some loop using numpy and sirf iterators, like
+       std::copy(np_array->begin(), np_array->end(), self->begin());
+    */
+    return np_array;
+  }
+  %newobject as_array();
+}

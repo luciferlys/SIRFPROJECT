@@ -35,8 +35,8 @@ SET_SOURCE_FILES_PROPERTIES(test.i PROPERTIES
 find_package(PythonInterp)
 FIND_PACKAGE(PythonLibs REQUIRED)
 INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
-#FIND_PACKAGE(Numpy REQUIRED)
-#INCLUDE_DIRECTORIES(${NUMPY_INCLUDE_DIRS})
+FIND_PACKAGE(Numpy REQUIRED)
+INCLUDE_DIRECTORIES(${NUMPY_INCLUDE_DIRS})
 
   # TODO probably better to call the module stirpy or something
   # TODO -builtin option only appropriate for python
