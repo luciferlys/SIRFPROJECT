@@ -55,8 +55,7 @@
 %ignore sirf::xSTIR_GeneralisedPrior3DF;
 %ignore sirf::xSTIR_GeneralisedObjectiveFunction3DF;
 %ignore sirf::xSTIR_IterativeReconstruction3DF;
-%ignore sirf::xSTIR_FBP2DReconstruction::set_up;
-%ignore sirf::xSTIR_FBP2DReconstruction::process;
+
 
 %include "std_string.i"
 %include "std_vector.i"
@@ -98,12 +97,21 @@
     dims[0]=sirf_dims["z"];
     dims[1]=sirf_dims["y"];
     dims[2]=sirf_dims["x"];
-    PyObject * np_array =
-      PyArray_SimpleNew(3, dims, NPY_FLOAT);
-    /* TODO: some loop using numpy and sirf iterators, like
-       std::copy(np_array->begin(), np_array->end(), self->begin());
-    */
-    return np_array;
+    auto np_array =
+      (PyArrayObject *)PyArray_SimpleNew(3, dims, NPY_FLOAT);
+    auto dtype = PyArray_DescrFromType(NPY_FLOAT);
+    auto iter = NpyIter_New(np_array, NPY_ITER_READONLY, NPY_KEEPORDER, NPY_NO_CASTING, dtype);
+    if (iter==NULL) {
+        return NULL;
+    }
+    auto iternext = NpyIter_GetIterNext(iter, NULL);
+    auto dataptr = (float **) NpyIter_GetDataPtrArray(iter);
+    auto sirfiter = self->begin();
+    do {
+    **dataptr = *sirfiter;
+    ++sirfiter; }
+    while (iternext(iter));
+    return PyArray_Return(np_array);
   }
   %newobject as_array();
 }
