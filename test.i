@@ -48,10 +48,7 @@
 
 %ignore sirf::STIRImageData::zoom_image;
 %ignore sirf::ListmodeToSinograms;
-%ignore sirf::PETAcquisitionSensitivityModel;
-%ignore sirf::PETAcquisitionModel;
 %ignore sirf::PETScatterEstimator;
-%ignore sirf::PETAcquisitionModelUsingMatrix;
 %ignore sirf::xSTIR_GeneralisedPrior3DF;
 %ignore sirf::xSTIR_GeneralisedObjectiveFunction3DF;
 %ignore sirf::xSTIR_IterativeReconstruction3DF;

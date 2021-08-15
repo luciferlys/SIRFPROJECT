@@ -11,6 +11,9 @@ int main()
 	sirf::PETAcquisitionDataInFile c;
 	sirf::PETAcquisitionDataInMemory d;
 	sirf::xSTIR_FBP2DReconstruction e;
+	sirf::PETAcquisitionModel f;
+	sirf::PETAcquisitionSensitivityModel g;
+	sirf::PETAcquisitionModelUsingMatrix h;
 
 	return 0;
 }
