@@ -5,8 +5,16 @@ from matplotlib import pyplot as plt
 SIRFpath='D:/SIRF/SIRFbuild/INSTALL/'
 #SIRFpath='/home/sirfuser/devel/install'
 c= ala.STIRImageData(SIRFpath + '/share/SIRF-3.1/data/examples/PET/test_image_PM_QP_6.hv') 
+
+# test creating a STIRImageData object with given dimensions etc
+c= ala.STIRImageData()
+c.initialise((40,5,6),(1,1,1));
+print(c.get_geom_info_sptr().get_info())
+
 ctest= PET.ImageData(SIRFpath + '/share/SIRF-3.1/data/examples/PET/test_image_PM_QP_6.hv') 
 im= ala.STIRImageData(SIRFpath + '/share/SIRF-3.1/data/examples/PET/test_image_PM_QP_6.hv') 
+print(im.get_geom_info_sptr().get_info())
+
 b= ala.PETAcquisitionDataInFile(SIRFpath + '/share/SIRF-3.1/data/examples/PET/Utahscat600k_ca_seg4.hs')
 btest= PET.AcquisitionData(SIRFpath + '/share/SIRF-3.1/data/examples/PET/Utahscat600k_ca_seg4.hs')
 
