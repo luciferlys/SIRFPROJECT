@@ -6,6 +6,7 @@
 
 int main()
 {
+	//sirf::MathClass r;
 	sirf::STIRImageData a;
 	//sirf::PETAcquisitionData b;
 	sirf::PETAcquisitionDataInFile c;
@@ -14,6 +15,9 @@ int main()
 	sirf::PETAcquisitionModel f;
 	sirf::PETAcquisitionSensitivityModel g;
 	sirf::PETAcquisitionModelUsingMatrix h;
+	//sirf::PETAcquisitionModelUsingParallelproj i;
 
 	return 0;
 }
+
+

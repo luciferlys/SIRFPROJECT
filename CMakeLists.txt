@@ -32,11 +32,17 @@ SET_SOURCE_FILES_PROPERTIES(test.i PROPERTIES
   CPLUSPLUS ON
   INCLUDE_DIRECTORIES "${SIRF_INCLUDE_DIRS}")
 
+if(SWIG_VERSION GREATER_EQUAL 4.0)
+      SET(CMAKE_SWIG_FLAGS -doxygen)
+endif()
+
 find_package(PythonInterp)
 FIND_PACKAGE(PythonLibs REQUIRED)
 INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
 FIND_PACKAGE(Numpy REQUIRED)
 INCLUDE_DIRECTORIES(${NUMPY_INCLUDE_DIRS})
+
+SET(CMAKE_SWIG_FLAGS -DSTIR_WITH_Parallelproj_PROJECTOR)
 
   # TODO probably better to call the module stirpy or something
   # TODO -builtin option only appropriate for python
