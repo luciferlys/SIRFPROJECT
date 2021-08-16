@@ -11,7 +11,7 @@ if(NOT CMAKE_BUILD_TYPE)
    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "type of build: Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif()
 FIND_PACKAGE(SIRF REQUIRED)
-
+FIND_PACKAGE(STIR REQUIRED)
 add_library(libtest test.cxx)
 target_link_libraries(libtest sirf::cstir)
 
@@ -42,8 +42,9 @@ INCLUDE_DIRECTORIES(${NUMPY_INCLUDE_DIRS})
 SET(CMAKE_SWIG_FLAGS -DSTIR_WITH_Parallelproj_PROJECTOR)
 
 if(SWIG_VERSION GREATER_EQUAL 4.0)
-      SET(CMAKE_SWIG_FLAGS "${CMAKE_SWIG_FLAGS} -doxygen")
+      SET(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_FLAGS} -doxygen)
 endif()
+
 
   # TODO probably better to call the module stirpy or something
   # TODO -builtin option only appropriate for python

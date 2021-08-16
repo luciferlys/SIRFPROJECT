@@ -15,7 +15,7 @@ int main()
 	sirf::PETAcquisitionModel f;
 	sirf::PETAcquisitionSensitivityModel g;
 	sirf::PETAcquisitionModelUsingMatrix h;
-	//sirf::PETAcquisitionModelUsingParallelproj i;
+	sirf::PETAcquisitionModelUsingParallelproj i;
 
 	return 0;
 }
