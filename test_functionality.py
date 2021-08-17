@@ -1,30 +1,52 @@
 import ala
 import sirf.STIR as PET
 from matplotlib import pyplot as plt
+import numpy
 
 SIRFpath='D:/SIRF/SIRFbuild/INSTALL/'
-#SIRFpath='/home/sirfuser/devel/install'
-c= ala.STIRImageData(SIRFpath + '/share/SIRF-3.1/data/examples/PET/test_image_PM_QP_6.hv') 
+SIRFpath='/home/sirfuser/devel/install'
 
+#%% data reading/creation
 # test creating a STIRImageData object with given dimensions etc
 c= ala.STIRImageData()
 c.initialise((40,5,6),(1,1,1));
 print(c.get_geom_info_sptr().get_info())
 
+c= ala.STIRImageData(SIRFpath + '/share/SIRF-3.1/data/examples/PET/test_image_PM_QP_6.hv') 
 ctest= PET.ImageData(SIRFpath + '/share/SIRF-3.1/data/examples/PET/test_image_PM_QP_6.hv') 
-im= ala.STIRImageData(SIRFpath + '/share/SIRF-3.1/data/examples/PET/test_image_PM_QP_6.hv') 
-print(im.get_geom_info_sptr().get_info())
+print(c.get_geom_info_sptr().get_info())
 
 b= ala.PETAcquisitionDataInFile(SIRFpath + '/share/SIRF-3.1/data/examples/PET/Utahscat600k_ca_seg4.hs')
 btest= PET.AcquisitionData(SIRFpath + '/share/SIRF-3.1/data/examples/PET/Utahscat600k_ca_seg4.hs')
 
+#%% perform a simulation of a PET acquisition
+im= ala.STIRImageData(SIRFpath + '/share/SIRF-3.1/data/examples/PET/brain/emission.hv')
+#im=ala.STIRImageData(SIRFpath + '/share/SIRF-3.1/data/examples/PET/test_image_PM_QP_6.hv') 
+plt.imshow(im.as_array()[5,:,:])
+
+# construct a "template" for the acquisition data
+sino_template= ala.PETAcquisitionDataInMemory("PRT-1",1,1)
+#print(sino_template.get_info())
+
+# construct an acquisition model and use it to simulate the data
+acq_model = ala.PETAcquisitionModelUsingRayTracingMatrix();
+acq_model.set_up(sino_template, im)
+simulated_data = acq_model.forward(im)
+#%% reconstruct with FBP2D
 recon = ala.xSTIR_FBP2DReconstruction()
-recon.set_input(b)
-#recon.set_up(im)
+recon.set_input(simulated_data)
+recon.set_up(im)
 recon.process()   
 image = recon.get_output()
-image.write('C:/Users/78309/Desktop/Testfiles/')
+plt.imshow(image.as_array()[5,:,:])
+#image.write('C:/Users/78309/Desktop/Testfiles/fbp.hv')
 
+#%% plot some profiles
+plt.figure()
+plt.plot(im.as_array()[5,75,:])
+plt.plot(image.as_array()[5,75,:])
+plt.legend(["input", "reconstruction"])
+#%%% more validation
 #c.fill(0)
 print(c.dot(c))
 print(ctest.dot(ctest))

@@ -20,7 +20,10 @@
 #include "sirf/common/DataContainer.h"
 #include "sirf/STIR/stir_data_containers.h"
 #include "sirf/STIR/stir_x.h"
-  
+
+#include "stir/recon_buildblock/ProjMatrixByBinUsingRayTracing.h"
+#include "stir/ExamInfo.h"
+#include "stir/ProjDataInMemory.h"
 %}
 
 #if defined(SWIGPYTHON)
@@ -131,7 +134,7 @@
   }
   %newobject as_array();
 
-  %feature("autodoc", "set dimemnsions etc") initialise;
+  %feature("docstring", "set dimensions etc") initialise;
   void initialise(VoxelisedGeometricalInfo<3>::Size dimensions,
                   VoxelisedGeometricalInfo<3>::Coordinate vsize = {1.F, 1.F, 1.F},
                   VoxelisedGeometricalInfo<3>::Coordinate origin = {0.F, 0.F, 0.F})
@@ -147,3 +150,51 @@
     self->fill(0.F);
   }
 }
+
+%extend sirf::PETAcquisitionDataInFile
+{
+  std::string get_info() const
+  {
+    return self->data()->get_proj_data_info_sptr()->parameter_info();
+  }
+}
+
+%extend sirf::PETAcquisitionDataInMemory
+{
+  /// constructor that takes a scanner name and some data characteristics
+  /* Note that adding a constructor in SWIG is more like adding a static member function return a pointer */
+  PETAcquisitionDataInMemory(const std::string& scanner_name, int span=1, int max_ring_diff=-1, int view_mash_factor=1)
+  {
+    stir::shared_ptr<stir::ExamInfo> sptr_ei(new stir::ExamInfo());
+    sptr_ei->imaging_modality = stir::ImagingModality::PT;
+    stir::shared_ptr<stir::ProjDataInfo> sptr_pdi =
+      sirf::PETAcquisitionData::proj_data_info_from_scanner
+			(scanner_name, span, max_ring_diff, view_mash_factor);
+    auto ptr = new sirf::PETAcquisitionDataInMemory(sptr_ei, sptr_pdi);
+    ptr->fill(0.0f);
+    return ptr;
+  }
+
+  std::string get_info() const
+  {
+    return self->data()->get_proj_data_info_sptr()->parameter_info();
+  }
+}
+%feature("docstring", "return a string describing the geometry of the data") sirf::PETAcquisitionDataInFile::get_info;
+%feature("docstring", "return a string describing the geometry of the data") sirf::PETAcquisitionDataInMemory::get_info;
+
+
+%inline %{
+  /// A class that performs ray-tracing
+  class PETAcquisitionModelUsingRayTracingMatrix : public sirf::PETAcquisitionModelUsingMatrix
+  {
+    public:
+
+    PETAcquisitionModelUsingRayTracingMatrix()
+    {
+      stir::shared_ptr<stir::ProjMatrixByBin> sptr_matrix(new stir::ProjMatrixByBinUsingRayTracing());
+      set_matrix(sptr_matrix);
+    }
+  };
+
+%}
