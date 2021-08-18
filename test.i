@@ -182,19 +182,3 @@
 }
 %feature("docstring", "return a string describing the geometry of the data") sirf::PETAcquisitionDataInFile::get_info;
 %feature("docstring", "return a string describing the geometry of the data") sirf::PETAcquisitionDataInMemory::get_info;
-
-
-%inline %{
-  /// A class that performs ray-tracing
-  class PETAcquisitionModelUsingRayTracingMatrix : public sirf::PETAcquisitionModelUsingMatrix
-  {
-    public:
-
-    PETAcquisitionModelUsingRayTracingMatrix()
-    {
-      stir::shared_ptr<stir::ProjMatrixByBin> sptr_matrix(new stir::ProjMatrixByBinUsingRayTracing());
-      set_matrix(sptr_matrix);
-    }
-  };
-
-%}
