@@ -149,6 +149,28 @@
     self->set_up_geom_info();
     self->fill(0.F);
   }
+  void from_array(PyObject* p)
+  {
+    const char* check(PyObject* py_obj)
+    {
+      if (py_obj == NULL) return "C NULL value";
+      if (py_obj == Py_None) return "Python None" ;
+      if (PyCallable_Check(py_obj)) return "callable";
+      if (PyFloat_Check(py_obj)) return "float";
+      return "wrong type";
+    }
+
+    std::cout << check(p) << std::endl;
+    sirf::Dimensions sirf_dims = self->dimensions();
+    npy_intp dims[3];
+    dims[0]=sirf_dims["z"];
+    dims[1]=sirf_dims["y"];
+    dims[2]=sirf_dims["x"];
+    PyArrayObject * pcont = PyArray_GETCONTIGUOUS(p);
+    npy_intp[3] first_ind = {0,0,0};
+    float * data_ptr = reinterpret_cast<float*>(PyArray_GetPtr(pcont, first_ind);
+    self->fill_from(data_ptr);
+  }
 }
 
 %extend sirf::PETAcquisitionDataInFile
@@ -182,3 +204,4 @@
 }
 %feature("docstring", "return a string describing the geometry of the data") sirf::PETAcquisitionDataInFile::get_info;
 %feature("docstring", "return a string describing the geometry of the data") sirf::PETAcquisitionDataInMemory::get_info;
+
