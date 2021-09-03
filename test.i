@@ -25,7 +25,7 @@
 #include "stir/ExamInfo.h"
 #include "stir/ProjDataInMemory.h"
 %}
-
+ /* Include numpy support */
 #if defined(SWIGPYTHON)
 %include "numpy.i"
 #endif
@@ -38,6 +38,7 @@
 #endif
 %}
 
+ /* Solve clone issue */
 %ignore *::clone;
 %extend sirf::DataContainer
 {
@@ -49,7 +50,7 @@
 
 %newobject *::my_clone();
 
-
+ /* Ignore unwanted classes to avoid errors */
 %ignore sirf::STIRImageData::zoom_image;
 %ignore sirf::ListmodeToSinograms;
 %ignore sirf::PETScatterEstimator;
@@ -57,7 +58,7 @@
 %ignore sirf::xSTIR_GeneralisedObjectiveFunction3DF;
 %ignore sirf::xSTIR_IterativeReconstruction3DF;
 
-
+ /* Include essential files and solve shared_ptr issue */
 %include "std_string.i"
 %include "std_vector.i"
 %include "std_map.i"
@@ -72,8 +73,7 @@
 %shared_ptr(sirf::PETAcquisitionDataInMemory)
 %shared_ptr(sirf::MathClass)
 
-
-
+ /* Ignore unwanted classes to avoid errors */
 %ignore sirf::PETAcquisitionData::get_empty_segment_by_sinogram;
 %ignore sirf::PETAcquisitionData::get_segment_by_sinogram;
 %ignore sirf::PETAcquisitionData::set_segment;
@@ -100,6 +100,7 @@
 %template(VoxelisedGeometricalInfo3D) sirf::VoxelisedGeometricalInfo<3>;
 #%template(TransformMatrix3D) sirf::VoxelisedGeometricalInfo<3>::TransformMatrix;
 
+ /* Include SIRF headers*/
 %include "sirf/common/ImageData.h"
 %include "sirf/common/PETImageData.h"
 %include "sirf/STIR/stir_types.h"
@@ -107,6 +108,7 @@
 %include "sirf/STIR/stir_x.h"
 %include "test.h"
 
+ /* Extend STIRImageData class with more features */
 %extend sirf::STIRImageData
 {
   PyObject* as_array() const
@@ -149,8 +151,25 @@
     self->set_up_geom_info();
     self->fill(0.F);
   }
+  
+  void from_array(PyObject *p)
+  {
+    if (!PyArray_Check(p))
+    {
+      throw std::runtime_error("wrong type");
+    }
+    sirf::Dimensions sirf_dims = self->dimensions();
+    npy_intp dims[3];
+    dims[0]=sirf_dims["z"];
+    dims[1]=sirf_dims["y"];
+    dims[2]=sirf_dims["x"];
+    PyArrayObject *pcont = PyArray_GETCONTIGUOUS((PyArrayObject *)p);
+    npy_intp first_ind[3] = {0,0,0};
+    float const *data_ptr = reinterpret_cast<float const *>(PyArray_GetPtr(pcont, first_ind));
+    std::copy(data_ptr, data_ptr + (dims[0]*dims[1]*dims[2]), self->begin());
+  }
 }
-
+ /* Extend PETAcquisitionData classes with more features */
 %extend sirf::PETAcquisitionDataInFile
 {
   std::string get_info() const

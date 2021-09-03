@@ -11,8 +11,8 @@ namespace sirf
     public:
 
         double a;
-
-        virtual unsigned int items();
+        /* example functions */
+        virtual unsigned int items() const;
 
         virtual void multiply(const DataContainer& x, const DataContainer& y);
 

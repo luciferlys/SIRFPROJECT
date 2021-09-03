@@ -6,7 +6,8 @@
 
 int main()
 {
-	//sirf::MathClass r;
+	/* wrapped classes */
+	//sirf::MathClass r; 
 	sirf::STIRImageData a;
 	//sirf::PETAcquisitionData b;
 	sirf::PETAcquisitionDataInFile c;
