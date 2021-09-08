@@ -30,6 +30,12 @@
 %include "numpy.i"
 #endif
 
+#if defined(SWIGPYTHON)
+%rename(FBP2DReconstructor) sirf::xSTIR_FBP2DReconstruction;
+%rename(clone) sirf::DataContainer::my_clone;
+// %rename(fill) sirf::STIRImageData::from_array; this will cause trouble
+#endif
+
 %init %{
 #if defined(SWIGPYTHON)
   // numpy support
@@ -156,7 +162,8 @@
   {
     if (!PyArray_Check(p))
     {
-      throw std::runtime_error("wrong type");
+        std::cout << "[C++ Error] wrong type" << std::endl;
+        return;
     }
     sirf::Dimensions sirf_dims = self->dimensions();
     npy_intp dims[3];
@@ -177,6 +184,8 @@
     return self->data()->get_proj_data_info_sptr()->parameter_info();
   }
 }
+
+
 
 %extend sirf::PETAcquisitionDataInMemory
 {
