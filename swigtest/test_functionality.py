@@ -78,7 +78,7 @@ print(Acq_data_test.is_complex())
 # test as_array
 print(stir_data.as_array().shape)
 print(stir_data_test.as_array().shape)
-print(stir_data_test.as_array()[5,23,:])
+print(stir_data.as_array()[5,23,:])
 plt.imshow(stir_data.as_array()[5,:,:])
 plt.grid(True)
 filename = 'test_graph1.png'
