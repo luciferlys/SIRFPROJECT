@@ -5,7 +5,7 @@ To get this``` ala ```module (an automatic generated Python interface to SIRF) r
 You may also need to install SWIG, boost and CMake to perform SIRF-SuperBuild installation. 
 ## Usage
 Firstly, please download``` swigtest ```folder; 
-Then please use CMake to install the SWIG project and obtain the auto-generated python module files ala.py & _ala.pyd;
+Then please use CMake to install this SWIG project and obtain the auto-generated python module files ala.py & _ala.pyd.
 Please open PowerShell and input these lines before the next step:
 ```bash
 $install="...\SIRFbuild\INSTALL" (your SIRF location)
