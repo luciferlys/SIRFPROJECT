@@ -1,7 +1,7 @@
 # Automatic Generation of Python Interfaces to the C++ Synergistic Image Reconstruction Framework
 This is a course project module used as part of the UCL MSc Scientific and Data Intensive Computing.
 ## Installation
-To get this``` ala ```module (an automatic generated Python interface to SIRF) running, you might need to install SIRF from https://github.com/SyneRBI/SIRF-SuperBuild First. 
+To get this``` ala ```module (an automatic generated Python interface to SIRF) running, you might need to install SIRF from https://github.com/SyneRBI/SIRF-SuperBuild first. 
 You may also need to install SWIG, boost and CMake to perform SIRF-SuperBuild installation. 
 ## Usage
 Firstly, please download``` swigtest ```folder; 
