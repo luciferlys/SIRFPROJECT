@@ -18,4 +18,4 @@ $install="...\SIRFbuild\INSTALL" (your SIRF location)
  $Env:MATLABPATH+='; ...\SIRFbuild\sources\SPM'
  $Env:Path += ";...\MATLAB\extern\bin\win64; ...\MATLAB\bin\win64" (your MATLAB location)
 ```
-Then please run``` test_functionality.py ```in Python to test the``` ala ```module's fuctionalities. 
+Then please run``` test_functionality.py ```in Python to test the``` ala ```module's functionalities. 
