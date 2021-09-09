@@ -30,11 +30,11 @@
 %include "numpy.i"
 #endif
 
-#if defined(SWIGPYTHON)
+
 %rename(FBP2DReconstructor) sirf::xSTIR_FBP2DReconstruction;
 %rename(clone) sirf::DataContainer::my_clone;
 // %rename(fill) sirf::STIRImageData::from_array; this will cause trouble
-#endif
+
 
 %init %{
 #if defined(SWIGPYTHON)
