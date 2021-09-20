@@ -4,7 +4,7 @@ This is a course project module used as part of the UCL MSc Scientific and Data 
 To get this``` ala ```module (an automatic generated Python interface to SIRF) running, you might need to install SIRF from https://github.com/SyneRBI/SIRF-SuperBuild first. 
 You may also need to install SWIG, boost and CMake to perform SIRF-SuperBuild installation. 
 ## Usage
-Firstly, please download``` swigtest ```folder; 
+Firstly, please download``` main ```folder; 
 Then please use CMake and a C++ compiler like VS2019's MSVC to install this SWIG project and obtain the auto-generated python module files ala.py & _ala.pyd.
 Please open PowerShell and input these lines before the next step:
 ```bash
