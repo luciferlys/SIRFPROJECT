@@ -15,8 +15,9 @@ FIND_PACKAGE(STIR REQUIRED)
 add_library(libtest test.cxx)
 target_link_libraries(libtest sirf::cstir)
 
-add_executable(testmain testmain.cxx)
-target_link_libraries(testmain libtest ${STIR_LIBRARIES})
+# Comment out testmain temporarily due to errors
+#add_executable(testmain testmain.cxx)
+#target_link_libraries(testmain libtest ${STIR_LIBRARIES})
 
 
 FIND_PACKAGE(SWIG 3.0 REQUIRED)
@@ -39,11 +40,20 @@ INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
 FIND_PACKAGE(Numpy REQUIRED)
 INCLUDE_DIRECTORIES(${NUMPY_INCLUDE_DIRS})
 
-SET(CMAKE_SWIG_FLAGS -DSTIR_WITH_Parallelproj_PROJECTOR)
+# Make MATLAB support available
+FIND_PACKAGE(Matlab COMPONENTS MX_LIBRARY REQUIRED)
+matlab_get_mex_suffix("${Matlab_ROOT_DIR}" Matlab_MEX_EXT)
+message(STATUS "Found Matlab_LIBRARIES: ${Matlab_LIBRARIES}")
+message(STATUS "Found Matlab_INCLUDE_DIRS: ${Matlab_INCLUDE_DIRS}")
 
-if(SWIG_VERSION GREATER_EQUAL 4.0)
-      SET(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_FLAGS} -doxygen)
+if (STIR_WITH_Parallelproj_PROJECTOR)
+	SET(CMAKE_SWIG_FLAGS -DSTIR_WITH_Parallelproj_PROJECTOR)
 endif()
+
+# Comment out -doxygen option for matlab
+#if(SWIG_VERSION GREATER_EQUAL 4.0)
+#      SET(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_FLAGS} -doxygen)
+#endif()
 
 
   # TODO probably better to call the module stirpy or something
@@ -51,8 +61,10 @@ endif()
   # while the next statement sets it for all modules called test
   #SET(SWIG_MODULE_test_EXTRA_FLAGS -builtin )
   SWIG_ADD_LIBRARY(ala LANGUAGE python TYPE MODULE SOURCES test.i ${STIR_REGISTRIES})
+  SWIG_ADD_LIBRARY(alaMATLAB LANGUAGE matlab TYPE MODULE SOURCES test.i ${STIR_REGISTRIES})
   #SWIG_WORKAROUND(${SWIG_MODULE_ala_REAL_NAME})
   SWIG_LINK_LIBRARIES(ala libtest sirf::cstir ${STIR_LIBRARIES} ${PYTHON_LIBRARIES})
+  SWIG_LINK_LIBRARIES(alaMATLAB libtest sirf::cstir ${STIR_LIBRARIES} ${Matlab_LIBRARIES})
   #target_link_libraries(${SWIG_MODULE_ala_REAL_NAME})
 
   set(PYTHON_DEST ${CMAKE_INSTALL_PREFIX}/python CACHE PATH "Destination for python module")
