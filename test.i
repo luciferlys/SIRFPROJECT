@@ -44,8 +44,9 @@
 #endif
 %}
 
- /* Solve clone issue */
+ /* Solve std::unique_ptr issue by ignoring some functions using it */
 %ignore *::clone;
+%ignore *::conjugate;
 %extend sirf::DataContainer
 {
   DataContainer * my_clone() const
@@ -63,13 +64,16 @@
 %ignore sirf::xSTIR_GeneralisedPrior3DF;
 %ignore sirf::xSTIR_GeneralisedObjectiveFunction3DF;
 %ignore sirf::xSTIR_IterativeReconstruction3DF;
+%ignore sirf::PETAcquisitionModelUsingParallelproj;
 
- /* Include essential files and solve shared_ptr issue */
+ /* Include essential files and solve shared_ptr issue(matlab branch doesn't have std_array.i yet) */
 %include "std_string.i"
 %include "std_vector.i"
 %include "std_map.i"
-%include "std_array.i"
 %include "std_shared_ptr.i"
+#if defined(SWIGPYTHON)
+  %include "std_array.i"
+#endif
 %shared_ptr(sirf::DataContainer)
 %shared_ptr(sirf::ImageData)
 %shared_ptr(sirf::PETImageData)
