@@ -92,6 +92,7 @@
 %newobject *::dimensions;
 
 // Give names to some templated types used by SIRF (e.g. in VoxelisedGeometricalInfo)
+#if defined(SWIGPYTHON)
 %template(ArrayInt3D) std::array<int, 3>;
 %template(Index3D) std::array<unsigned int, 3>;
 %template(Coordinate) std::array<float, 3>;
@@ -99,6 +100,7 @@
 %shared_ptr(sirf::GeometricalInfo<3, 3>);
 %shared_ptr(sirf::VoxelisedGeometricalInfo<3>);
 %shared_ptr(sirf::VoxelisedGeometricalInfo<3>::TransformMatrix);
+#endif
 // ignore due to SWIG bug with int-templates
 %ignore *::calculate_index_to_physical_point_matrix;
 
@@ -106,9 +108,11 @@
 
 %include "sirf/common/DataContainer.h"
 
+#if defined(SWIGPYTHON)
 %template(GeometricalInfo3D) sirf::GeometricalInfo<3, 3>;
 %template(VoxelisedGeometricalInfo3D) sirf::VoxelisedGeometricalInfo<3>;
 #%template(TransformMatrix3D) sirf::VoxelisedGeometricalInfo<3>::TransformMatrix;
+#endif
 
  /* Include SIRF headers*/
 %include "sirf/common/ImageData.h"
@@ -119,6 +123,7 @@
 %include "test.h"
 
  /* Extend STIRImageData class with more features */
+#if defined(SWIGPYTHON)
 %extend sirf::STIRImageData
 {
   PyObject* as_array() const
@@ -214,3 +219,4 @@
 }
 %feature("docstring", "return a string describing the geometry of the data") sirf::PETAcquisitionDataInFile::get_info;
 %feature("docstring", "return a string describing the geometry of the data") sirf::PETAcquisitionDataInMemory::get_info;
+#endif
