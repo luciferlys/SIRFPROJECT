@@ -24,6 +24,8 @@
 #include "stir/recon_buildblock/ProjMatrixByBinUsingRayTracing.h"
 #include "stir/ExamInfo.h"
 #include "stir/ProjDataInMemory.h"
+
+#include "matrix.h"
 %}
  /* Include numpy support */
 #if defined(SWIGPYTHON)
@@ -188,6 +190,54 @@
     std::copy(data_ptr, data_ptr + (dims[0]*dims[1]*dims[2]), self->begin());
   }
   #endif
+
+  #if defined(SWIGMATLAB)
+  mxArray* as_array() const
+  {
+    sirf::Dimensions sirf_dims = self->dimensions();
+    mwSize dims[3];
+    dims[0]=sirf_dims["z"];
+    dims[1]=sirf_dims["y"];
+    dims[2]=sirf_dims["x"];
+
+    // code is based on MATLAB examples, e.g. in MATLAB do
+    // edit([matlabroot '/extern/examples/refbook/arrayFillSetPr.c']);
+#if MX_HAS_INTERLEAVED_COMPLEX
+    typedef mxFloat matlab_float;
+#else
+    typedef double matlab_float; // WARNING; currently using double, as otherwise mxSetPr fails
+#endif
+    auto data = (matlab_float *)mxMalloc(dims[0]*dims[1]*dims[2] * sizeof(matlab_float));
+
+    // copy the SIRF data
+    // std::copy needs really recent version of STIR, so we'll use a loop
+    //std::copy(self->begin(), self->end(), data);
+    {
+      auto sirfiter = self->begin(); 
+      auto dataiter = data;
+      while (sirfiter != self->end())
+        {
+          *dataiter = *sirfiter;
+          ++sirfiter;
+          ++dataiter;
+        }
+    }
+    // Create a zero-sized array. we'll add data to add below
+    mwSize zero_dims[3] = {0,0,0};
+    auto mx_array =
+      mxCreateNumericArray(3, zero_dims, mxSINGLE_CLASS, mxREAL);
+    // Put the C array into the mxArray and define its dimensions
+#if MX_HAS_INTERLEAVED_COMPLEX
+    mxSetSingles(mx_array, data);
+#else
+    mxSetPr(mx_array, data);
+#endif
+    mxSetDimensions(mx_array, dims, 3);
+    // Do not call mxFree(dynamicData) because mx_array points to dynamicData
+    return mx_array;
+  }
+  %newobject as_array();
+#endif
 }
 
  /* Extend PETAcquisitionData classes with more features */
