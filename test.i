@@ -154,16 +154,16 @@
   #endif
 
   %feature("docstring", "set dimensions etc") initialise;
-  void initialise(VoxelisedGeometricalInfo<3>::Size dimensions,
-                  VoxelisedGeometricalInfo<3>::Coordinate vsize = {1.F, 1.F, 1.F},
-                  VoxelisedGeometricalInfo<3>::Coordinate origin = {0.F, 0.F, 0.F})
+  void initialise(int dimension_0, int dimension_1, int dimension_2,
+                  float vsize_0 = 1.F, float vsize_1 = 1.F, float vsize_2 = 1.F,
+                  float origin_0 = 0.F, float origin_1 = 0.F, float origin_2 = 0.F)
   {
     stir::shared_ptr<sirf::Voxels3DF>
-      v_sptr(new sirf::Voxels3DF(IndexRange3D(0, dimensions[0] - 1,
-                                        -(dimensions[1] / 2), -(dimensions[1] / 2) + dimensions[1] - 1,
-                                        -(dimensions[2] / 2), -(dimensions[2] / 2) + dimensions[2] - 1),
-                                 sirf::Coord3DF(origin[0], origin[1], origin[2]),
-                                 sirf::Coord3DF(vsize[0], vsize[1], vsize[2])));
+      v_sptr(new sirf::Voxels3DF(IndexRange3D(0, dimension_0 - 1,
+                                        -(dimension_1 / 2), -(dimension_1 / 2) + dimension_1 - 1,
+                                        -(dimension_2 / 2), -(dimension_2 / 2) + dimension_2 - 1),
+                                 sirf::Coord3DF(origin_0, origin_1, origin_2),
+                                 sirf::Coord3DF(vsize_0, vsize_1, vsize_2)));
     self->set_data_sptr(v_sptr);
     self->set_up_geom_info();
     self->fill(0.F);
