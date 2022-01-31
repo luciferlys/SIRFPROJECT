@@ -61,6 +61,7 @@ endif()
   # while the next statement sets it for all modules called test
   #SET(SWIG_MODULE_test_EXTRA_FLAGS -builtin )
   SWIG_ADD_LIBRARY(ala LANGUAGE python TYPE MODULE SOURCES test.i ${STIR_REGISTRIES})
+  SET(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_FLAGS} -mexname alaMATLAB_wrap)
   SWIG_ADD_LIBRARY(alaMATLAB LANGUAGE matlab TYPE MODULE SOURCES test.i ${STIR_REGISTRIES})
   #SWIG_WORKAROUND(${SWIG_MODULE_ala_REAL_NAME})
   SWIG_LINK_LIBRARIES(ala libtest sirf::cstir ${STIR_LIBRARIES} ${PYTHON_LIBRARIES})
