@@ -1,25 +1,30 @@
 %%
+% addpath for the interface files
 addpath '/home/sirfuser/devel/Rocci-SIRFPROJECT/SIRFPROJECT'
 addpath '/home/sirfuser/devel/install/matlab/'
-
+% launch PET
+set_up_PET([]);
+% get path for PET examples
+sirf_examples_path = sirf.Utilities.examples_data_path('PET');
 %%
-% Data reading & creation
+% declare null STIRImageData and test initialise()
 stir_data_null = ala.STIRImageData();
 stir_data_null.initialise(40,5,6,1,1,1);
 disp(stir_data_null.get_geom_info_sptr().get_info());
 %%
-stir_data_1 = ala.STIRImageData('/home/sirfuser/devel/install/share/SIRF-3.1/data/examples/PET/test_image_PM_QP_6.hv');
+% create STIRImageData from PET examples
+stir_data_1 = ala.STIRImageData([sirf_examples_path,'/test_image_PM_QP_6.hv']);
 disp(stir_data_1.get_geom_info_sptr().get_info());
-set_up_PET([]);
-stir_data_test = sirf.STIR.ImageData('/home/sirfuser/devel/install/share/SIRF-3.1/data/examples/PET/test_image_PM_QP_6.hv');
+stir_data_test = sirf.STIR.ImageData([sirf_examples_path,'/test_image_PM_QP_6.hv']);
 
 %%
-acq_data = ala.PETAcquisitionDataInFile('/home/sirfuser/devel/install/share/SIRF-3.1/data/examples/PET/Utahscat600k_ca_seg4.hs');
-acq_data_test = sirf.STIR.AcquisitionData('/home/sirfuser/devel/install/share/SIRF-3.1/data/examples/PET/Utahscat600k_ca_seg4.hs');
+% create PETAcquisitionData from PET examples
+acq_data = ala.PETAcquisitionDataInFile([sirf_examples_path,'/Utahscat600k_ca_seg4.hs']);
+acq_data_test = sirf.STIR.AcquisitionData([sirf_examples_path,'/Utahscat600k_ca_seg4.hs']);
 
 %%
-% [Unfinished]save figure(wait for as_array())
-im = ala.STIRImageData('/home/sirfuser/devel/install/share/SIRF-3.1/data/examples/PET/brain/emission.hv');
+% use as_array() to convert STIRImageData into an array
+im = ala.STIRImageData([sirf_examples_path,'/brain/emission.hv']);
 im_array = im.as_array();
 im_array_one_pic = im_array(5,:,:);
 %im_array_one_pic = reshape(im_array_one_pic,211,211);
@@ -52,8 +57,8 @@ fprintf('the result of stir_data_1.is_complex() is %d (0 stands for false, 1 sta
 %fprintf('the result of stir_data_test.is_complex() is %d (0 stands for false, 1 stands for true).\n', stir_data_test.is_complex());
 fprintf('the result of acq_data.norm() is %g.\n', acq_data.norm());
 fprintf('the result of acq_data_test.norm() is %g.\n', acq_data_test.norm());
-%fprintf('the reuslt of acq_data.is_complex() is %d (0 stands for false, 1 stands for true).\n', acq_data.is_complex());
-fprintf('the reuslt of acq_data_test.is_complex() is %d (0 stands for false, 1 stands for true).\n', acq_data_test.is_complex());
+fprintf('the reuslt of acq_data.is_complex() is %d (0 stands for false, 1 stands for true).\n', acq_data.is_complex());
+%fprintf('the reuslt of acq_data_test.is_complex() is %d (0 stands for false, 1 stands for true).\n', acq_data_test.is_complex());
 
 %% test as_array()
 disp('the dimensions of stir_data_1 in each dimension is:');
